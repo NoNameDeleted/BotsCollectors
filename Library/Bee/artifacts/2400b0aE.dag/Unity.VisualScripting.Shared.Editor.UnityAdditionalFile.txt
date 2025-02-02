@@ -1,1 +1,1 @@
-/home/vlad/Yandex.Disk/AllUnity/боты сборщики/BotsCollectors
+/home/vlad/GitHub/BotsCollectors

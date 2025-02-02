@@ -291,15 +291,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: cab8eb2b4b5340ea6a021aa730fe7da8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.07
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cab8eb2b4b5340ea6a021aa730fe7da8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.000000009674409
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cab8eb2b4b5340ea6a021aa730fe7da8, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.42
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cab8eb2b4b5340ea6a021aa730fe7da8, type: 3}
       propertyPath: m_LocalRotation.w
@@ -828,12 +828,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfc337e3ebe982d1e923e0f395c38909, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _units:
+  _generator: {fileID: 685165149}
+  _allUnits:
   - {fileID: 803517454}
   - {fileID: 1341192220}
   - {fileID: 1803704698}
   _resourceCapacity: 30
-  _resourseCount: 0
   _scanRadius: 15
   _scanRate: 1
 --- !u!1660057539 &9223372036854775807

@@ -1,44 +1,99 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Base : MonoBehaviour
 {
-    [SerializeField] private List<Unit> _units;
+    [SerializeField] private ResourceGenerator _generator;
+    [SerializeField] private List<Unit> _allUnits;
     [SerializeField] private int _resourceCapacity = 30;
-    [SerializeField] private int _resourseCount = 0;
     [SerializeField] private float _scanRadius = 15.0f;
     [SerializeField] private float _scanRate = 1.0f;
-    private int _freeUnitsCount = 0;
-    private int _nearbyResourceCount = 0;
-    private List<Resource> _resources;
+
+    private int _storedResourceCount = 0;
+    private List<Resource> _freeResources;
+    private List<Unit> _freeUnits;
+
+    private void Awake()
+    {
+        _freeResources = new List<Resource>();
+        _freeUnits = new List<Unit>();
+    }
 
     private void Start()
     {
+        foreach (Unit unit in _allUnits)
+        {
+            unit.ResourceStored += AddResource;
+        }
+
+        foreach (Unit unit in _allUnits)
+        {
+            _freeUnits.Add(unit);
+        }
+
         InvokeRepeating(nameof(Scann), 0.0f, _scanRate);
     }
 
     private void Update()
     {
-        if ((_resourseCount < _resourceCapacity) & (_freeUnitsCount > 0))
+        if ((_storedResourceCount >= _resourceCapacity) || (_freeUnits.Count <= 0) || (_freeResources.Count == 0))
+            return;
+
+        //Debug.Log(_storedResourceCount);
+
+        foreach (Unit unit in _allUnits)
         {
-            SendUnit();
+            if (unit.IsFree == false)
+                continue;
+
+            foreach (Resource resource in _freeResources)
+            {
+                Debug.Log(resource.IsFree);
+                if (resource.IsFree == true)
+                {
+                    unit.StartMoveToResourse(resource);
+                    _freeUnits.Remove(unit);
+                    return;
+                }
+            }
         }
+        
     }
 
     private void Scann()
     {
+        Debug.Log("free resource: " + _freeResources.Count);
+        Debug.Log("free units: " + _freeUnits.Count);
+        Debug.Log(_storedResourceCount);
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, _scanRadius);
+
+        _freeResources.Clear();
 
         foreach (Collider collider in hitColliders)
         {
             if (collider.TryGetComponent<Resource>(out Resource resource))
-                _resources.Add(resource);
+                _freeResources.Add(resource);  
         }
     }
 
-    private void SendUnit()
+    public void AddResource(Resource resource)
     {
+        _storedResourceCount += 1;
 
+        _freeUnits.Clear();
+
+        foreach (Unit unit in _allUnits)
+        {
+            if (unit.IsFree == true)
+            {
+                _freeUnits.Add(unit);
+            }
+        }
+
+        _generator.ReleaseResource(resource);
+        resource.IsFree = true;
     }
 }

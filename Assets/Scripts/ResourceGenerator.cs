@@ -36,19 +36,14 @@ public class ResourceGenerator : MonoBehaviour
 
     private void Start()
     {
-        InvokeRepeating(nameof(GetResource), 0.0f, _repeatRate);
-    }
-
-    private void Update()
-    {
-        if (_pool.CountActive >= _resourseMaxCount)
-            CancelInvoke(nameof(GetResource));
+        StartCoroutine(nameof(GenerateResource));
     }
 
     private void GetResource(Resource resource)
     {
         resource.transform.position = GetRandomPosition();
         resource.gameObject.SetActive(true);
+        resource.IsFree = true;
     }
 
     private Vector3 GetRandomPosition()
@@ -82,5 +77,25 @@ public class ResourceGenerator : MonoBehaviour
     private void GetResource()
     {
         _pool.Get();
+    }
+
+    private IEnumerator GenerateResource()
+    {
+        WaitForSeconds wait = new WaitForSeconds(_repeatRate);
+
+        while (enabled)
+        {
+            if (_pool.CountActive <= _resourseMaxCount)
+            {
+                GetResource();
+            }
+            
+            yield return wait;
+        }
+    }
+
+    public void ReleaseResource(Resource resource)
+    {
+        _pool.Release(resource);
     }
 }
