@@ -1,11 +1,10 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
+using TMPro;
 using UnityEngine;
 
 public class Base : MonoBehaviour
 {
+    [SerializeField] private TextMeshProUGUI _text;
     [SerializeField] private ResourceGenerator _generator;
     [SerializeField] private List<Unit> _allUnits;
     [SerializeField] private int _resourceCapacity = 30;
@@ -41,8 +40,6 @@ public class Base : MonoBehaviour
     {
         if ((_storedResourceCount >= _resourceCapacity) || (_freeUnits.Count <= 0) || (_freeResources.Count == 0))
             return;
-
-        //Debug.Log(_storedResourceCount);
 
         foreach (Unit unit in _allUnits)
         {
@@ -81,7 +78,11 @@ public class Base : MonoBehaviour
 
     public void AddResource(Resource resource)
     {
+        if (_storedResourceCount >= _resourceCapacity)
+            return;
+        
         _storedResourceCount += 1;
+        _text.SetText("Resources: " + _storedResourceCount + "/" + _resourceCapacity);
 
         _freeUnits.Clear();
 
