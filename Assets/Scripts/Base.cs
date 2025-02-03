@@ -48,7 +48,6 @@ public class Base : MonoBehaviour
 
             foreach (Resource resource in _freeResources)
             {
-                Debug.Log(resource.IsFree);
                 if (resource.IsFree == true)
                 {
                     unit.StartMoveToResourse(resource);
@@ -79,7 +78,14 @@ public class Base : MonoBehaviour
         
         _storedResourceCount += 1;
         _text.SetText("Resources: " + _storedResourceCount + "/" + _resourceCapacity);
+        _generator.ReleaseResource(resource);
+        resource.IsFree = true;
 
+        UpdateFreeUnitsList();
+    }
+
+    private void UpdateFreeUnitsList()
+    {
         _freeUnits.Clear();
 
         foreach (Unit unit in _allUnits)
@@ -89,8 +95,5 @@ public class Base : MonoBehaviour
                 _freeUnits.Add(unit);
             }
         }
-
-        _generator.ReleaseResource(resource);
-        resource.IsFree = true;
     }
 }
