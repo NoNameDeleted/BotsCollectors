@@ -57,14 +57,10 @@ public class Base : MonoBehaviour
                 }
             }
         }
-        
     }
 
     private void Scann()
     {
-        Debug.Log("free resource: " + _freeResources.Count);
-        Debug.Log("free units: " + _freeUnits.Count);
-        Debug.Log(_storedResourceCount);
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, _scanRadius);
 
         _freeResources.Clear();
