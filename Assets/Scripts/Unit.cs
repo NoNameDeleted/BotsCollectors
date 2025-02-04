@@ -4,23 +4,24 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
-    [SerializeField] private float _speed = 5.0f;
+    [SerializeField] private float _speed = 1.0f;
+    [SerializeField] private Vector3 _pickupOffset = new Vector3(0, 0.3f, 0);
     private bool _isFree = true;
     private Resource _pickedResourse;
 
     public bool IsFree => _isFree;
 
-    public event Action<Resource> ResourceStored;
+    public event Action<Resource> ResourceUnloaded;
+    public event Action<Unit> MissionCompleted;
 
     public void StartMoveToResourse(Resource resource)
     {
         StartCoroutine(nameof(MoveToResourse), resource);
     }
 
-    public IEnumerator MoveToResourse(Resource resource)
+    private IEnumerator MoveToResourse(Resource resource)
     {
         _isFree = false;
-        resource.IsFree = false;
 
         while (transform.position != resource.transform.position)
         {
@@ -29,26 +30,26 @@ public class Unit : MonoBehaviour
         }
 
         _pickedResourse = resource;
-        resource.PickUpByUnit(this);
-        StartCoroutine(nameof(MoveToBase));
+        StartCoroutine(nameof(MoveToBase), resource);
     }
 
-    public IEnumerator MoveToBase()
+    private IEnumerator MoveToBase(Resource resource)
     {
         while (transform.position != Vector3.zero)
         {
             transform.position = Vector3.MoveTowards(transform.position, Vector3.zero, _speed * Time.deltaTime);
+            resource.transform.position = transform.position + _pickupOffset;
             yield return null;
         }
 
-        StoreResource(_pickedResourse);
+        DunpResource(_pickedResourse);
     }
 
-    public void StoreResource(Resource resource)
+    private void DunpResource(Resource resource)
     {
         transform.DetachChildren();
-        _isFree = true;
-        ResourceStored?.Invoke(resource);
+        ResourceUnloaded?.Invoke(resource);
+        MissionCompleted?.Invoke(this);
         _pickedResourse = null;
     }
 }

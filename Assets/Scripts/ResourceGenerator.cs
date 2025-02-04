@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Pool;
 using Vector3 = UnityEngine.Vector3;
+using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(SphereCollider))]
 public class ResourceGenerator : MonoBehaviour
@@ -15,6 +17,8 @@ public class ResourceGenerator : MonoBehaviour
 
     private ObjectPool<Resource> _pool;
     private SphereCollider _sphere;
+
+    public event Action<Resource> ResourseGenerated;
 
     private void Awake()
     {
@@ -36,11 +40,17 @@ public class ResourceGenerator : MonoBehaviour
         StartCoroutine(nameof(GenerateResource));
     }
 
+    public void ReleaseResource(Resource resource)
+    {
+        if (resource.gameObject.activeSelf == true)
+            _pool.Release(resource);
+    }
+
     private void GetResource(Resource resource)
     {
         resource.transform.position = GetRandomPosition();
         resource.gameObject.SetActive(true);
-        resource.IsFree = true;
+        ResourseGenerated?.Invoke(resource);
     }
 
     private Vector3 GetRandomPosition()
@@ -89,10 +99,5 @@ public class ResourceGenerator : MonoBehaviour
             
             yield return wait;
         }
-    }
-
-    public void ReleaseResource(Resource resource)
-    {
-        _pool.Release(resource);
     }
 }

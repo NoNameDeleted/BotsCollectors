@@ -338,7 +338,10 @@
 "Assets/Scripts/Base.cs"
 "Assets/Scripts/Resource.cs"
 "Assets/Scripts/ResourceGenerator.cs"
+"Assets/Scripts/ResourceManager.cs"
+"Assets/Scripts/Scanner.cs"
 "Assets/Scripts/Unit.cs"
+"Assets/Scripts/UnitsManager.cs"
 -langversion:9.0
 /deterministic
 /optimize+
