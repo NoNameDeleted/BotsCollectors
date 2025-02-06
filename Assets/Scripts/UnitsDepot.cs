@@ -2,15 +2,14 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnitsManager : MonoBehaviour
+public class UnitsDepot : MonoBehaviour
 {
     [SerializeField] private List<Unit> _allUnits;
-    [SerializeField] private Unit _unitPrefab;
-    [SerializeField] private int _newUnitCost = 3;
 
     private List<Unit> _freeUnits;
 
     public event Action<Resource> UnitUnloadResource;
+    public event Action<Resource> UnitAimedAtResource;
 
     public bool HasFreeUnits
     {
@@ -22,9 +21,11 @@ public class UnitsManager : MonoBehaviour
 
     private void OnEnable()
     {
+        _freeUnits = new List<Unit>();
+
         foreach (Unit unit in _allUnits)
         {
-            unit.MissionCompleted += SetUnitFree;
+            unit.MissionCompleted += _freeUnits.Add;
             unit.ResourceUnloaded += UnloadResource;
         }
     }
@@ -33,24 +34,17 @@ public class UnitsManager : MonoBehaviour
     {
         foreach (Unit unit in _allUnits)
         {
-            unit.MissionCompleted -= SetUnitFree;
+            unit.MissionCompleted -= _freeUnits.Add;
             unit.ResourceUnloaded -= UnloadResource;
         }
     }
 
     private void Start()
     {
-        _freeUnits = new List<Unit>();
-
         foreach (Unit unit in _allUnits)
         {
             _freeUnits.Add(unit);
         }
-    }
-
-    private void SetUnitFree(Unit unit)
-    {
-        _freeUnits.Add(unit);
     }
 
     public void SendFreeUnitToGathering(Resource resource)
@@ -59,6 +53,7 @@ public class UnitsManager : MonoBehaviour
         {
             Unit unit = _freeUnits[0];
             unit.StartMoveToResourse(resource);
+            UnitAimedAtResource?.Invoke(resource);
             _freeUnits.Remove(unit);
         }
     }
@@ -68,9 +63,8 @@ public class UnitsManager : MonoBehaviour
         UnitUnloadResource?.Invoke(resource);
     }
 
-    public void CreateNewUnit()
+    public void AddUnit(Unit unit)
     {
-        Unit unit = Instantiate(_unitPrefab, transform);
         _allUnits.Add(unit);
         _freeUnits.Add(unit);
     }

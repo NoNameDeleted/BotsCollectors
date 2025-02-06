@@ -1,35 +1,88 @@
+using System;
 using UnityEngine;
 
 public class Base : MonoBehaviour
 {
     [SerializeField] private Scanner _scanner;
-    [SerializeField] private ResourceManager _resourceManager;
-    [SerializeField] private UnitsManager _unitsManager;
+    [SerializeField] private ResourceStorage _resourceStorage;
+    [SerializeField] private UnitsDepot _unitsDepot;
+    [SerializeField] private UnitsSpawner _unitSpawner;
+    [SerializeField] private Builder _builder;
+
+    private enum Priority
+    {
+        CreateUnits,
+        BuildBase
+    }
+
+    private Priority _priorityState;
 
     private void Start()
     {
+        _priorityState = Priority.CreateUnits;
         _scanner.StartScanning();
     }
 
     private void OnEnable()
     {
-        _unitsManager.UnitUnloadResource += _resourceManager.StoreResource;
+        _unitsDepot.UnitUnloadResource += _resourceStorage.StoreResource;
+        _unitsDepot.UnitAimedAtResource += _resourceStorage.OccupyResource;
+        _builder.FlagPlaced += SetBuildPriority;
     }
 
     private void OnDisable()
     {
-        _unitsManager.UnitUnloadResource -= _resourceManager.StoreResource;
+        _unitsDepot.UnitUnloadResource -= _resourceStorage.StoreResource;
+        _unitsDepot.UnitAimedAtResource -= _resourceStorage.OccupyResource;
+        _builder.FlagPlaced -= SetBuildPriority;
     }
 
     private void Update()
     {
-        if (_resourceManager.HasFreeSpace == true)
+        GatherResouses();
+
+        if (_priorityState == Priority.CreateUnits)
         {
-            if (_resourceManager.TryFindFreeResource(out Resource freeResource))
-            {
-                _unitsManager.SendFreeUnitToGathering(freeResource);
-            }
-                
+            SpawnUnits();
         }
+        else if (_priorityState == Priority.BuildBase)
+        {
+            BuildBase();
+        }
+        
+    }
+
+    private void GatherResouses()
+    {
+        if (_resourceStorage.HasFreeStorageSpace == true)
+        {
+            if (_resourceStorage.TryFindFreeResource(out Resource freeResource))
+            {
+                _unitsDepot.SendFreeUnitToGathering(freeResource);
+            }
+        }
+    }
+
+    private void SpawnUnits()
+    {
+        if (_resourceStorage.StoredResourceCount >= _unitSpawner.UnitCost)
+        {
+            _resourceStorage.SpendResources(_unitSpawner.UnitCost);
+            _unitsDepot.AddUnit(_unitSpawner.SpawnUnit());
+        }
+    }
+
+    private void BuildBase()
+    {
+        if (_resourceStorage.StoredResourceCount >= _builder.BaseCost)
+        {
+            _resourceStorage.SpendResources(_builder.BaseCost);
+            _builder.BuildBase();
+        }
+    }
+
+    private void SetBuildPriority()
+    {
+        _priorityState = Priority.BuildBase;
     }
 }

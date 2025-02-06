@@ -1,10 +1,17 @@
 using UnityEngine;
 
+[RequireComponent(typeof(SphereCollider))]
 public class Scanner : MonoBehaviour
 {
-    [SerializeField] private float _scanRadius = 15.0f;
     [SerializeField] private float _scanRate = 1.0f;
-    [SerializeField] private ResourceManager _resourceManager;
+    [SerializeField] private ResourceStorage _resourceManager;
+
+    private SphereCollider _sphere;
+
+    private void Awake()
+    {
+        _sphere = GetComponent<SphereCollider>();
+    }
 
     public void StartScanning()
     {
@@ -13,7 +20,7 @@ public class Scanner : MonoBehaviour
 
     private void Scan()
     {
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, _scanRadius);
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, _sphere.radius);
 
         foreach (Collider collider in hitColliders)
         {

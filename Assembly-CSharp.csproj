@@ -64,13 +64,18 @@
     <Analyzer Include="/home/vlad/Unity/Hub/Editor/2022.3.40f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets/Scripts/ResourceManager.cs" />
+    <Compile Include="Assets/Scripts/Flag.cs" />
+    <Compile Include="Assets/Scripts/UnitsSpawner.cs" />
+    <Compile Include="Assets/Scripts/ResourceStorage.cs" />
+    <Compile Include="Assets/Scripts/Ground.cs" />
+    <Compile Include="Assets/Scripts/Builder.cs" />
+    <Compile Include="Assets/Scripts/UnitsDepot.cs" />
     <Compile Include="Assets/Scripts/Resource.cs" />
+    <Compile Include="Assets/Scripts/Player.cs" />
     <Compile Include="Assets/Scripts/Base.cs" />
     <Compile Include="Assets/Scripts/Unit.cs" />
     <Compile Include="Assets/Scripts/ResourceGenerator.cs" />
     <Compile Include="Assets/Scripts/Scanner.cs" />
-    <Compile Include="Assets/Scripts/UnitsManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets/TextMesh Pro/Shaders/TMPro.cginc" />

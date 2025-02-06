@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class ResourceManager : MonoBehaviour
+public class ResourceStorage : MonoBehaviour
 {
     [SerializeField] private ResourceGenerator _generator;
     [SerializeField] private TextMeshProUGUI _text;
@@ -12,7 +12,7 @@ public class ResourceManager : MonoBehaviour
     private List<Resource> _freeResources;
     private int _storedResourceCount = 0;
 
-    public bool HasFreeSpace
+    public bool HasFreeStorageSpace
     {
         get
         {
@@ -20,15 +20,27 @@ public class ResourceManager : MonoBehaviour
         }
     }
 
+    public int StoredResourceCount => _storedResourceCount;
+
     private void OnEnable()
     {
         _generator.ResourseGenerated += SetResourceFree;
+    }
+
+    private void OnDisable()
+    {
+        _generator.ResourseGenerated -= SetResourceFree;
     }
 
     private void Awake()
     {
         _allResources = new List<Resource>();
         _freeResources = new List<Resource>();
+    }
+
+    private void UpdateCounter()
+    {
+        _text.SetText("Resources: " + _storedResourceCount + "/" + _resourceCapacity);
     }
 
     public void AddResource(Resource resource)
@@ -42,7 +54,6 @@ public class ResourceManager : MonoBehaviour
         if (_freeResources.Count > 0)
         {
             freeResource = _freeResources[0];
-            _freeResources.Remove(freeResource);
             return true;
         }
         else
@@ -50,6 +61,11 @@ public class ResourceManager : MonoBehaviour
             freeResource = null;
             return false;
         }
+    }
+
+    public void OccupyResource(Resource resource)
+    {
+        _freeResources.Remove(resource);
     }
 
     public void SetResourceFree(Resource resource)
@@ -63,7 +79,17 @@ public class ResourceManager : MonoBehaviour
             return;
         
         _storedResourceCount += 1;
-        _text.SetText("Resources: " + _storedResourceCount + "/" + _resourceCapacity);
+        UpdateCounter();
         _generator.ReleaseResource(resource);
+    }
+
+    public void SpendResources(int amount)
+    {
+        if (amount > 0)
+        {
+            _storedResourceCount -= amount;
+        }
+            
+        UpdateCounter();
     }
 }
