@@ -12,7 +12,7 @@ public class Unit : MonoBehaviour
     public bool IsFree => _isFree;
 
     public event Action<Resource> ResourceUnloaded;
-    public event Action<Unit> MissionCompleted;
+    public event Action<Unit> TaskCompleted;
 
     public void StartMoveToResourse(Resource resource)
     {
@@ -35,10 +35,12 @@ public class Unit : MonoBehaviour
 
     private IEnumerator MoveToBase(Resource resource)
     {
+        resource.transform.SetParent(transform);
+        resource.transform.position = transform.position + _pickupOffset;
+
         while (transform.position != Vector3.zero)
         {
             transform.position = Vector3.MoveTowards(transform.position, Vector3.zero, _speed * Time.deltaTime);
-            resource.transform.position = transform.position + _pickupOffset;
             yield return null;
         }
 
@@ -49,7 +51,7 @@ public class Unit : MonoBehaviour
     {
         transform.DetachChildren();
         ResourceUnloaded?.Invoke(resource);
-        MissionCompleted?.Invoke(this);
+        TaskCompleted?.Invoke(this);
         _pickedResourse = null;
     }
 }

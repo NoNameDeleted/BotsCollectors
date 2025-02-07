@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(SphereCollider))]
@@ -7,6 +8,8 @@ public class Scanner : MonoBehaviour
     [SerializeField] private ResourceStorage _resourceManager;
 
     private SphereCollider _sphere;
+
+    public event Action ResorceFounded;
 
     private void Awake()
     {
@@ -21,11 +24,13 @@ public class Scanner : MonoBehaviour
     private void Scan()
     {
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, _sphere.radius);
-
+        
         foreach (Collider collider in hitColliders)
         {
             if (collider.TryGetComponent<Resource>(out Resource resource))
                 _resourceManager.AddResource(resource); 
         }
+
+        ResorceFounded?.Invoke();
     }
 }

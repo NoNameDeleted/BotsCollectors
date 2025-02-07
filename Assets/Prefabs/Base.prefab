@@ -50,7 +50,7 @@ SphereCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Radius: 15
   m_Center: {x: 0, y: 0, z: 0}
@@ -66,7 +66,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f674a04e3fb2a7c29f39f3cf9deca9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _scanRadius: 15
   _scanRate: 1
   _resourceManager: {fileID: 2245467072715744146}
 --- !u!1001 &909683648862612522
@@ -141,6 +140,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cab8eb2b4b5340ea6a021aa730fe7da8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7365640745938163996}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cab8eb2b4b5340ea6a021aa730fe7da8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6527748245827284329}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cab8eb2b4b5340ea6a021aa730fe7da8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7100990113235585498}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cab8eb2b4b5340ea6a021aa730fe7da8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6726818562897499388}
   m_SourcePrefab: {fileID: 100100000, guid: cab8eb2b4b5340ea6a021aa730fe7da8, type: 3}
 --- !u!1 &26653968300167547 stripped
 GameObject:
@@ -160,8 +168,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _scanner: {fileID: 4174916052643767114}
-  _resourceManager: {fileID: 2245467072715744146}
-  _unitsManager: {fileID: 7365640745938163996}
+  _resourceStorage: {fileID: 2245467072715744146}
+  _unitsDepot: {fileID: 7365640745938163996}
+  _unitSpawner: {fileID: 6726818562897499388}
+  _builder: {fileID: 6527748245827284329}
+  _unitsSpawnActivated: 0
 --- !u!114 &2245467072715744146
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -175,7 +186,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _generator: {fileID: 0}
-  _text: {fileID: 0}
+  _counter: {fileID: 0}
   _resourceCapacity: 30
 --- !u!114 &7365640745938163996
 MonoBehaviour:
@@ -190,11 +201,60 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _allUnits:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  _unitPrefab: {fileID: 359941339188620646, guid: 80ab15ef51b9296b3844b34248029c4e, type: 3}
-  _unitCost: 10
+  - {fileID: 359941339188620646, guid: 80ab15ef51b9296b3844b34248029c4e, type: 3}
+  - {fileID: 359941339188620646, guid: 80ab15ef51b9296b3844b34248029c4e, type: 3}
+  - {fileID: 359941339188620646, guid: 80ab15ef51b9296b3844b34248029c4e, type: 3}
+--- !u!114 &6527748245827284329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 26653968300167547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff6d058aa8fd8b7918322543830dbc83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _flagPrefab: {fileID: 7571931831987384451, guid: 69d91bb1bf6f3d1b5bdf206d6640f1aa, type: 3}
+  _basePrefab: {fileID: 853058137583953197}
+  _baseCost: 5
+--- !u!64 &7100990113235585498
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 26653968300167547}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -6134512621279170306, guid: cab8eb2b4b5340ea6a021aa730fe7da8, type: 3}
+--- !u!114 &6726818562897499388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 26653968300167547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fd7ce46abaaebb2bb849b830095ada4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _unitPrefab: {fileID: 0}
+  _unitCost: 3
 --- !u!4 &798651195963116481 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: cab8eb2b4b5340ea6a021aa730fe7da8, type: 3}

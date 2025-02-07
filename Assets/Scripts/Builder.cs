@@ -1,19 +1,24 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Builder : MonoBehaviour
 {
-    [SerializeField] private Camera _camera;
     [SerializeField] private Flag _flagPrefab;
+    [SerializeField] private Base _basePrefab;
     [SerializeField] private int _baseCost = 5;
     private bool _isFlagSetMode = false;
     private bool _isFlagOnGround;
     private Flag _flag;
+    private Camera _camera;
 
     public int BaseCost => _baseCost;
     public event Action FlagPlaced;
+    public event Action BaseBuilt;
+
+    private void Awake()
+    {
+        _camera = Camera.main;
+    }
 
     private void OnMouseUp()
     {
@@ -57,6 +62,13 @@ public class Builder : MonoBehaviour
 
     public void BuildBase()
     {
-
+        if (_isFlagOnGround && _flag != null)
+        {
+            Base _base = Instantiate(_basePrefab, _flag.transform.position, Quaternion.identity);
+            _base.GetComponent<ResourceStorage>().Initialize();
+            Destroy(_flag.gameObject);
+            _isFlagOnGround = false;
+            BaseBuilt?.Invoke();
+        }
     }
 }

@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class Base : MonoBehaviour
@@ -8,6 +7,7 @@ public class Base : MonoBehaviour
     [SerializeField] private UnitsDepot _unitsDepot;
     [SerializeField] private UnitsSpawner _unitSpawner;
     [SerializeField] private Builder _builder;
+    [SerializeField] private bool _unitsSpawnActivated;
 
     private enum Priority
     {
@@ -19,28 +19,32 @@ public class Base : MonoBehaviour
 
     private void Start()
     {
+        _scanner.ResorceFounded += GatherResouses;
         _priorityState = Priority.CreateUnits;
-        _scanner.StartScanning();
     }
 
     private void OnEnable()
     {
         _unitsDepot.UnitUnloadResource += _resourceStorage.StoreResource;
         _unitsDepot.UnitAimedAtResource += _resourceStorage.OccupyResource;
+        _unitsDepot.ReadyForNewTask += GatherResouses;
+        _scanner.StartScanning();
         _builder.FlagPlaced += SetBuildPriority;
+        _builder.BaseBuilt += SetCreateUnitsPriority;
     }
 
     private void OnDisable()
     {
         _unitsDepot.UnitUnloadResource -= _resourceStorage.StoreResource;
         _unitsDepot.UnitAimedAtResource -= _resourceStorage.OccupyResource;
+        _unitsDepot.ReadyForNewTask += GatherResouses;
+        _scanner.ResorceFounded += GatherResouses;
         _builder.FlagPlaced -= SetBuildPriority;
+        _builder.BaseBuilt -= SetCreateUnitsPriority;
     }
 
     private void Update()
     {
-        GatherResouses();
-
         if (_priorityState == Priority.CreateUnits)
         {
             SpawnUnits();
@@ -65,7 +69,7 @@ public class Base : MonoBehaviour
 
     private void SpawnUnits()
     {
-        if (_resourceStorage.StoredResourceCount >= _unitSpawner.UnitCost)
+        if (_resourceStorage.StoredResourceCount >= _unitSpawner.UnitCost && _unitsSpawnActivated == true)
         {
             _resourceStorage.SpendResources(_unitSpawner.UnitCost);
             _unitsDepot.AddUnit(_unitSpawner.SpawnUnit());
@@ -84,5 +88,10 @@ public class Base : MonoBehaviour
     private void SetBuildPriority()
     {
         _priorityState = Priority.BuildBase;
+    }
+
+    private void SetCreateUnitsPriority()
+    {
+        _priorityState = Priority.CreateUnits;
     }
 }

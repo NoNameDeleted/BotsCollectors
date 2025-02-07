@@ -5,22 +5,29 @@ using TMPro;
 public class ResourceStorage : MonoBehaviour
 {
     [SerializeField] private ResourceGenerator _generator;
-    [SerializeField] private TextMeshProUGUI _text;
+    [SerializeField] private TextMeshProUGUI _counter;
     [SerializeField] private int _resourceCapacity = 30;
 
     private List<Resource> _allResources;
     private List<Resource> _freeResources;
     private int _storedResourceCount = 0;
 
-    public bool HasFreeStorageSpace
-    {
-        get
-        {
-            return _storedResourceCount < _resourceCapacity;
-        }
-    }
+    public bool HasFreeStorageSpace => _storedResourceCount < _resourceCapacity;
 
     public int StoredResourceCount => _storedResourceCount;
+
+    private void Awake()
+    {
+        if (_generator == null)
+        {
+            _generator = FindObjectOfType<ResourceGenerator>();
+        }
+
+        if (_counter == null)
+        {
+            _counter = FindFirstObjectByType<Counter>().GetComponent<TextMeshProUGUI>();
+        }
+    }
 
     private void OnEnable()
     {
@@ -32,7 +39,7 @@ public class ResourceStorage : MonoBehaviour
         _generator.ResourseGenerated -= SetResourceFree;
     }
 
-    private void Awake()
+    private void Start()
     {
         _allResources = new List<Resource>();
         _freeResources = new List<Resource>();
@@ -40,17 +47,26 @@ public class ResourceStorage : MonoBehaviour
 
     private void UpdateCounter()
     {
-        _text.SetText("Resources: " + _storedResourceCount + "/" + _resourceCapacity);
+        _counter.SetText("Resources: " + _storedResourceCount + "/" + _resourceCapacity);
     }
 
     public void AddResource(Resource resource)
     {
+        if (resource == null) 
+            return;
+
+        if (_allResources == null) 
+            _allResources = new List<Resource>();
+
         if (_allResources.Contains(resource) == false)
             _allResources.Add(resource);
     }
 
     public bool TryFindFreeResource(out Resource freeResource)
     {
+        if (_freeResources == null) 
+            _freeResources = new List<Resource>();
+
         if (_freeResources.Count > 0)
         {
             freeResource = _freeResources[0];
@@ -70,6 +86,9 @@ public class ResourceStorage : MonoBehaviour
 
     public void SetResourceFree(Resource resource)
     {
+        if (_freeResources == null) 
+            _freeResources = new List<Resource>();
+
         _freeResources.Add(resource);
     }
 
@@ -91,5 +110,11 @@ public class ResourceStorage : MonoBehaviour
         }
             
         UpdateCounter();
+    }
+
+    public void Initialize()
+    {
+        _allResources = new List<Resource>();
+        _freeResources = new List<Resource>();
     }
 }

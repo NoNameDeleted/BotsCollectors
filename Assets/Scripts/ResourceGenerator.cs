@@ -60,14 +60,12 @@ public class ResourceGenerator : MonoBehaviour
 
         if (Vector3.Distance(positionNearby, transform.position) < _sphere.radius)
         {
-            positionNearby = GetRandomPosition();
+            return GetRandomPosition();
         }
         else
         {
             return positionNearby;
         }
-
-        return positionNearby;
     }
 
     private Resource CreateResource(Resource prefab)

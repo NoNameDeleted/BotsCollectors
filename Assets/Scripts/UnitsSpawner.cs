@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class UnitsSpawner : MonoBehaviour
@@ -11,7 +9,6 @@ public class UnitsSpawner : MonoBehaviour
 
     public Unit SpawnUnit()
     {
-        Unit unit = Instantiate(_unitPrefab, transform);
-        return unit;
+        return Instantiate(_unitPrefab, transform);
     }
 }

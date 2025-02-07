@@ -71,11 +71,11 @@
     <Compile Include="Assets/Scripts/Builder.cs" />
     <Compile Include="Assets/Scripts/UnitsDepot.cs" />
     <Compile Include="Assets/Scripts/Resource.cs" />
-    <Compile Include="Assets/Scripts/Player.cs" />
     <Compile Include="Assets/Scripts/Base.cs" />
     <Compile Include="Assets/Scripts/Unit.cs" />
     <Compile Include="Assets/Scripts/ResourceGenerator.cs" />
     <Compile Include="Assets/Scripts/Scanner.cs" />
+    <Compile Include="Assets/Scripts/Counter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets/TextMesh Pro/Shaders/TMPro.cginc" />
