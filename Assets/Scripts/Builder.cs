@@ -65,7 +65,7 @@ public class Builder : MonoBehaviour
         if (_isFlagOnGround && _flag != null)
         {
             Base _base = Instantiate(_basePrefab, _flag.transform.position, Quaternion.identity);
-            _base.GetComponent<ResourceStorage>().Initialize();
+            _base.GetComponent<ResourceDistributor>().Initialize();
             Destroy(_flag.gameObject);
             _isFlagOnGround = false;
             BaseBuilt?.Invoke();

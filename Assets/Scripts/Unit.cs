@@ -44,10 +44,10 @@ public class Unit : MonoBehaviour
             yield return null;
         }
 
-        DumpResource(_pickedResourse);
+        UnloadResource(_pickedResourse);
     }
 
-    private void DumpResource(Resource resource)
+    private void UnloadResource(Resource resource)
     {
         transform.DetachChildren();
         ResourceUnloaded?.Invoke(resource);

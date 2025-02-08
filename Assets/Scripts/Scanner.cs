@@ -5,7 +5,7 @@ using UnityEngine;
 public class Scanner : MonoBehaviour
 {
     [SerializeField] private float _scanRate = 1.0f;
-    [SerializeField] private ResourceStorage _resourceManager;
+    [SerializeField] private ResourceDistributor _resourceManager;
 
     private SphereCollider _sphere;
 

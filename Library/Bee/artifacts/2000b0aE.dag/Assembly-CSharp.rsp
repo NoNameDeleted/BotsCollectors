@@ -341,6 +341,7 @@
 "Assets/Scripts/Flag.cs"
 "Assets/Scripts/Ground.cs"
 "Assets/Scripts/Resource.cs"
+"Assets/Scripts/ResourceDistributor.cs"
 "Assets/Scripts/ResourceGenerator.cs"
 "Assets/Scripts/ResourceStorage.cs"
 "Assets/Scripts/Scanner.cs"

@@ -3,6 +3,7 @@ using UnityEngine;
 public class Base : MonoBehaviour
 {
     [SerializeField] private Scanner _scanner;
+    [SerializeField] private ResourceDistributor _resourceDistibutor;
     [SerializeField] private ResourceStorage _resourceStorage;
     [SerializeField] private UnitsDepot _unitsDepot;
     [SerializeField] private UnitsSpawner _unitSpawner;
@@ -26,7 +27,7 @@ public class Base : MonoBehaviour
     private void OnEnable()
     {
         _unitsDepot.UnitUnloadResource += _resourceStorage.StoreResource;
-        _unitsDepot.UnitAimedAtResource += _resourceStorage.OccupyResource;
+        _unitsDepot.UnitAimedAtResource += _resourceDistibutor.ReserveResource;
         _unitsDepot.ReadyForNewTask += GatherResouses;
         _scanner.StartScanning();
         _builder.FlagPlaced += SetBuildPriority;
@@ -36,7 +37,7 @@ public class Base : MonoBehaviour
     private void OnDisable()
     {
         _unitsDepot.UnitUnloadResource -= _resourceStorage.StoreResource;
-        _unitsDepot.UnitAimedAtResource -= _resourceStorage.OccupyResource;
+        _unitsDepot.UnitAimedAtResource -= _resourceDistibutor.ReserveResource;
         _unitsDepot.ReadyForNewTask += GatherResouses;
         _scanner.ResorceFounded += GatherResouses;
         _builder.FlagPlaced -= SetBuildPriority;
@@ -53,14 +54,13 @@ public class Base : MonoBehaviour
         {
             BuildBase();
         }
-        
     }
 
     private void GatherResouses()
     {
         if (_resourceStorage.HasFreeStorageSpace == true)
         {
-            if (_resourceStorage.TryFindFreeResource(out Resource freeResource))
+            if (_resourceDistibutor.TryFindFreeResource(out Resource freeResource))
             {
                 _unitsDepot.SendFreeUnitToGathering(freeResource);
             }

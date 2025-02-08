@@ -1085,17 +1085,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d97c13331cb82dd6fab9c419710d8038, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2054394688 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2245467072715744146, guid: 770daf9d0c337ff7187d6a8377bb5c3d, type: 3}
-  m_PrefabInstance: {fileID: 274893204044592439}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2054394673}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 216d0fef86a37c8d1b9cf0c296cd8e70, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2054394693
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1110,6 +1099,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _unitPrefab: {fileID: 359941339188620646, guid: 80ab15ef51b9296b3844b34248029c4e, type: 3}
   _unitCost: 3
+--- !u!114 &2054394694 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3084866981746932476, guid: 770daf9d0c337ff7187d6a8377bb5c3d, type: 3}
+  m_PrefabInstance: {fileID: 274893204044592439}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2054394673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 897f5290b1215e059a34133683b28cc7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &274893204044592439
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1177,7 +1177,7 @@ PrefabInstance:
     - target: {fileID: 853058137583953197, guid: 770daf9d0c337ff7187d6a8377bb5c3d, type: 3}
       propertyPath: _resourceStorage
       value: 
-      objectReference: {fileID: 2054394688}
+      objectReference: {fileID: 2054394694}
     - target: {fileID: 2245467072715744146, guid: 770daf9d0c337ff7187d6a8377bb5c3d, type: 3}
       propertyPath: _text
       value: 
@@ -1187,6 +1187,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 315706629}
     - target: {fileID: 2245467072715744146, guid: 770daf9d0c337ff7187d6a8377bb5c3d, type: 3}
+      propertyPath: _generator
+      value: 
+      objectReference: {fileID: 685165149}
+    - target: {fileID: 3084866981746932476, guid: 770daf9d0c337ff7187d6a8377bb5c3d, type: 3}
+      propertyPath: _counter
+      value: 
+      objectReference: {fileID: 315706629}
+    - target: {fileID: 3084866981746932476, guid: 770daf9d0c337ff7187d6a8377bb5c3d, type: 3}
       propertyPath: _generator
       value: 
       objectReference: {fileID: 685165149}
