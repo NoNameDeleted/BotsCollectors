@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class Base : MonoBehaviour
@@ -10,6 +11,8 @@ public class Base : MonoBehaviour
     [SerializeField] private Builder _builder;
     [SerializeField] private bool _unitsSpawnActivated;
 
+    private ResourceGenerator _generator;
+
     private enum Priority
     {
         CreateUnits,
@@ -17,6 +20,11 @@ public class Base : MonoBehaviour
     }
 
     private Priority _priorityState;
+
+    private void Awake()
+    {
+        _generator = FindObjectOfType<ResourceGenerator>();
+    }
 
     private void Start()
     {
@@ -26,22 +34,26 @@ public class Base : MonoBehaviour
 
     private void OnEnable()
     {
-        _unitsDepot.UnitUnloadResource += _resourceStorage.StoreResource;
-        _unitsDepot.UnitAimedAtResource += _resourceDistibutor.ReserveResource;
-        _unitsDepot.ReadyForNewTask += GatherResouses;
+        _unitsDepot.UnitUnloadedResource += _resourceStorage.StoreResource;
+        _unitsDepot.UnitReservedResource += _resourceDistibutor.ReserveResource;
+        _unitsDepot.FreedUpForNewTask += GatherResouses;
         _scanner.StartScanning();
         _builder.FlagPlaced += SetBuildPriority;
         _builder.BaseBuilt += SetCreateUnitsPriority;
+        _generator.ResourseGenerated += _resourceDistibutor.SetResourceFree;
+        _resourceStorage.ResourceStored += _generator.ReleaseResource;
     }
 
     private void OnDisable()
     {
-        _unitsDepot.UnitUnloadResource -= _resourceStorage.StoreResource;
-        _unitsDepot.UnitAimedAtResource -= _resourceDistibutor.ReserveResource;
-        _unitsDepot.ReadyForNewTask += GatherResouses;
+        _unitsDepot.UnitUnloadedResource -= _resourceStorage.StoreResource;
+        _unitsDepot.UnitReservedResource -= _resourceDistibutor.ReserveResource;
+        _unitsDepot.FreedUpForNewTask += GatherResouses;
         _scanner.ResorceFounded += GatherResouses;
         _builder.FlagPlaced -= SetBuildPriority;
         _builder.BaseBuilt -= SetCreateUnitsPriority;
+        _generator.ResourseGenerated -= _resourceDistibutor.SetResourceFree;
+        _resourceStorage.ResourceStored -= _generator.ReleaseResource;
     }
 
     private void Update()
@@ -58,7 +70,7 @@ public class Base : MonoBehaviour
 
     private void GatherResouses()
     {
-        if (_resourceStorage.HasFreeStorageSpace == true)
+        if (_resourceStorage.HasFreeStorageSpace)
         {
             if (_resourceDistibutor.TryFindFreeResource(out Resource freeResource))
             {
@@ -85,13 +97,7 @@ public class Base : MonoBehaviour
         }
     }
 
-    private void SetBuildPriority()
-    {
-        _priorityState = Priority.BuildBase;
-    }
+    private void SetBuildPriority() => _priorityState = Priority.BuildBase;
 
-    private void SetCreateUnitsPriority()
-    {
-        _priorityState = Priority.CreateUnits;
-    }
+    private void SetCreateUnitsPriority() => _priorityState = Priority.CreateUnits;
 }

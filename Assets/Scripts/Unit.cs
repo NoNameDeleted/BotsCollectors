@@ -30,7 +30,7 @@ public class Unit : MonoBehaviour
         }
 
         _pickedResourse = resource;
-        StartCoroutine(nameof(MoveToBase), resource);
+        StartCoroutine(MoveToBase(resource));
     }
 
     private IEnumerator MoveToBase(Resource resource)

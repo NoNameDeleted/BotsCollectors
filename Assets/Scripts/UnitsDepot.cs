@@ -8,9 +8,9 @@ public class UnitsDepot : MonoBehaviour
 
     private List<Unit> _freeUnits;
 
-    public event Action<Resource> UnitUnloadResource;
-    public event Action ReadyForNewTask;
-    public event Action<Resource> UnitAimedAtResource;
+    public event Action<Resource> UnitUnloadedResource;
+    public event Action FreedUpForNewTask;
+    public event Action<Resource> UnitReservedResource;
 
     private void OnEnable()
     {
@@ -48,7 +48,7 @@ public class UnitsDepot : MonoBehaviour
             if (unit.isActiveAndEnabled)
             {
                 unit.StartMoveToResourse(resource);
-                UnitAimedAtResource?.Invoke(resource);
+                UnitReservedResource?.Invoke(resource);
                 _freeUnits.Remove(unit);
             }
         }
@@ -56,13 +56,13 @@ public class UnitsDepot : MonoBehaviour
 
     private void UnloadResource(Resource resource)
     {
-        UnitUnloadResource?.Invoke(resource);
+        UnitUnloadedResource?.Invoke(resource);
     }
 
     private void GetReadyForNewTask(Unit unit)
     {
         _freeUnits.Add(unit);
-        ReadyForNewTask?.Invoke();
+        FreedUpForNewTask?.Invoke();
     }
 
     public void AddUnit(Unit unit)

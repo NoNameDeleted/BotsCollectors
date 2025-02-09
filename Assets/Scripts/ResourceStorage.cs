@@ -1,23 +1,22 @@
 using UnityEngine;
 using TMPro;
+using System;
 
 public class ResourceStorage : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI _counter;
-    [SerializeField] private ResourceGenerator _generator;
     [SerializeField] private int _resourceCapacity = 30;
 
+    private TextMeshProUGUI _counter;
     private int _storedResourceCount = 0;
+
+    public event Action<Resource> ResourceStored;
 
     public bool HasFreeStorageSpace => _storedResourceCount < _resourceCapacity;
     public int StoredResourceCount => _storedResourceCount;
 
     private void Awake()
     {
-        if (_counter == null)
-        {
-            _counter = FindObjectOfType<Counter>().GetComponent<TextMeshProUGUI>();
-        }
+        _counter = FindObjectOfType<Counter>().GetComponent<TextMeshProUGUI>();
     }
 
     private void UpdateCounter()
@@ -30,7 +29,7 @@ public class ResourceStorage : MonoBehaviour
         if (_storedResourceCount < _resourceCapacity)
         {
             _storedResourceCount += 1;
-            _generator.ReleaseResource(resource);
+            ResourceStored?.Invoke(resource);
             UpdateCounter();
         }
     }

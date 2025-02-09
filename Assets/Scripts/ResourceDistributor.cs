@@ -3,30 +3,14 @@ using UnityEngine;
 
 public class ResourceDistributor : MonoBehaviour
 {
-    [SerializeField] private ResourceGenerator _generator;
-
     private List<Resource> _allResources;
     private List<Resource> _freeResources;
 
 
-    private void Awake()
+    public void Awake()
     {
         _allResources = new List<Resource>();
         _freeResources = new List<Resource>();
-
-        if (_generator == null)
-            _generator = FindObjectOfType<ResourceGenerator>();
-        
-    }
-
-    private void OnEnable()
-    {
-        _generator.ResourseGenerated += _freeResources.Add;
-    }
-
-    private void OnDisable()
-    {
-        _generator.ResourseGenerated -= _freeResources.Add;
     }
 
     public void AddResource(Resource resource)
@@ -49,14 +33,7 @@ public class ResourceDistributor : MonoBehaviour
         return _freeResources.Count > 0;
     }
 
-    public void ReserveResource(Resource resource)
-    {
-        _freeResources.Remove(resource);
-    }
+    public void SetResourceFree(Resource resource) => _freeResources.Add(resource);
 
-    public void Initialize()
-    {
-        _allResources = new List<Resource>();
-        _freeResources = new List<Resource>();
-    }
+    public void ReserveResource(Resource resource) => _freeResources.Remove(resource);
 }

@@ -58,7 +58,7 @@ public class ResourceGenerator : MonoBehaviour
         Vector3 positionInCircle = new Vector3(Random.insideUnitCircle.x, 0, Random.insideUnitCircle.y);
         Vector3 positionNearby = transform.position + positionInCircle * _radius;
 
-        if (Vector3.Distance(positionNearby, transform.position) < _sphere.radius)
+        if ((positionNearby - transform.position).sqrMagnitude <= _sphere.radius)
         {
             return GetRandomPosition();
         }
